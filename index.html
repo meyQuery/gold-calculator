@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 768px;
+            padding-right: 1rem;
+            padding-left: 1rem;
+            margin: 1rem auto 0;
+        }
+
+        .label {
+            margin-bottom: 0.5rem;
+        }
+
+        .input {
+            padding: 0.5rem 1rem;
+            border-radius: 0.25rem;
+            width: 100%;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 1rem;
+        }
+
+        button {
+            padding: 0.5rem 1rem;
+            font-size: 1rem;
+            border-radius: 0.25rem;
+        }
+
+        #total {
+            margin-top: 2rem;
+        }
+    </style>
+
+    <title>Gold Calculator</title>
+</head>
+
+<body>
+    <div class="container">
+        <form>
+            <label>
+                <div class="label">
+                    قیمت یک گرم طلای ۱۸ عیار به تومان
+                </div>
+                <input type="text" dir="ltr" class="input" id="unit">
+            </label>
+
+            <label>
+                <div class="label">
+                    وزن طلا به گرم
+                </div>
+                <input type="text" dir="ltr" class="input" id="gram">
+            </label>
+
+            <label>
+                <div class="label">
+                    درصد اجرت
+                </div>
+                <input type="text" dir="ltr" class="input" id="ojrat">
+            </label>
+
+            <label>
+                <div class="label">
+                    درصد مالیات
+                </div>
+                <input type="text" dir="ltr" class="input" id="tax" value="9">
+            </label>
+
+            <button type="submit">محاسبه کن</button>
+        </form>
+
+        <div id="total" dir="ltr"></div>
+    </div>
+
+    <script>
+        document.querySelector('form').addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            const unitValue = parseFloat(document.querySelector('#unit').value);
+            const gramValue = parseFloat(document.querySelector('#gram').value);
+            const ojratPercentage = parseFloat(document.querySelector('#ojrat').value);
+            const taxPercentage = parseFloat(document.querySelector('#tax').value);
+            const totalDiv = document.querySelector('#total');
+
+            let pureValue = unitValue * gramValue;
+            let ojratValue = (((unitValue * ojratPercentage)) / 100) * gramValue;
+            let storeProfitValue = ((pureValue + ojratValue) * 7) / 100;
+            let tax = ((storeProfitValue + ojratValue) * taxPercentage) / 100;
+
+            let totalValue = Math.round(pureValue + ojratValue + storeProfitValue + tax).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            totalDiv.innerHTML = totalValue + " تومان";
+        });
+    </script>
+</body>
+
+</html>
