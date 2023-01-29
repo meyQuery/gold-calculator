@@ -47,8 +47,15 @@
             border-radius: 0.25rem;
         }
 
-        #total {
-            margin-top: 2rem;
+        table {
+            width: 100%;
+            border: 1px solid black;
+            border-radius: 0.25rem;
+            margin-top: 1rem;
+        }
+
+        td {
+            white-space: nowrap;
         }
     </style>
 
@@ -81,7 +88,14 @@
 
             <label>
                 <div class="label">
-                    درصد مالیات
+                    درصد سود مغازه‌دار
+                </div>
+                <input type="text" dir="ltr" class="input" id="profit" value="7">
+            </label>
+
+            <label>
+                <div class="label">
+                    مالیات بر ارزش افزوده
                 </div>
                 <input type="text" dir="ltr" class="input" id="tax" value="9">
             </label>
@@ -89,7 +103,38 @@
             <button type="submit">محاسبه کن</button>
         </form>
 
-        <div id="total" dir="ltr"></div>
+        <table>
+            <tr>
+                <td>
+                    قیمت خام
+                </td>
+                <td id="purePrint"></td>
+            </tr>
+            <tr>
+                <td>
+                    مقدار اجرت
+                </td>
+                <td id="ojratPrint"></td>
+            </tr>
+            <tr>
+                <td>
+                    سود مغازه‌دار
+                </td>
+                <td id="profitPrint"></td>
+            </tr>
+            <tr>
+                <td>
+                    مالیات بر ارزش افزوده
+                </td>
+                <td id="taxPrint"></td>
+            </tr>
+            <tr>
+                <td>
+                    قیمت نهایی
+                </td>
+                <td id="totalPrint"></td>
+            </tr>
+        </table>
     </div>
 
     <script>
@@ -99,16 +144,21 @@
             const unitValue = parseFloat(document.querySelector('#unit').value);
             const gramValue = parseFloat(document.querySelector('#gram').value);
             const ojratPercentage = parseFloat(document.querySelector('#ojrat').value);
+            const profitPercentage = parseFloat(document.querySelector('#profit').value);
             const taxPercentage = parseFloat(document.querySelector('#tax').value);
             const totalDiv = document.querySelector('#total');
 
             let pureValue = unitValue * gramValue;
             let ojratValue = (((unitValue * ojratPercentage)) / 100) * gramValue;
-            let storeProfitValue = ((pureValue + ojratValue) * 7) / 100;
-            let tax = ((storeProfitValue + ojratValue) * taxPercentage) / 100;
+            let profitValue = ((pureValue + ojratValue) * profitPercentage) / 100;
+            let taxValue = Math.round(((profitValue + ojratValue) * taxPercentage) / 100);
+            let totalValue = Math.round(pureValue + ojratValue + profitValue + taxValue);
 
-            let totalValue = Math.round(pureValue + ojratValue + storeProfitValue + tax).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-            totalDiv.innerHTML = totalValue + " تومان";
+            document.querySelector('#purePrint').innerHTML = pureValue.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            document.querySelector('#ojratPrint').innerHTML = ojratValue.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            document.querySelector('#profitPrint').innerHTML = profitValue.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            document.querySelector('#taxPrint').innerHTML = taxValue.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            document.querySelector('#totalPrint').innerHTML = totalValue.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
         });
     </script>
 </body>
